@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Hello, World!",
+    "description": "Print 'Hello, World!' to the console using a print block.",
+    "difficulty": "beginner",
+    "starter_comment": "# Challenge: Hello, World!"
+  },
+  {
+    "title": "Sum Two Numbers",
+    "description": "Create two variables, assign numbers to them, then print their sum.",
+    "difficulty": "beginner",
+    "starter_comment": "# Challenge: Sum Two Numbers"
+  },
+  {
+    "title": "FizzBuzz",
+    "description": "Loop from 1 to 20. Print Fizz if divisible by 3, Buzz if by 5, FizzBuzz if by both, else the number.",
+    "difficulty": "intermediate",
+    "starter_comment": "# Challenge: FizzBuzz"
+  },
+  {
+    "title": "Countdown",
+    "description": "Use a while loop to print numbers from 10 down to 1, then print 'Blastoff!'.",
+    "difficulty": "beginner",
+    "starter_comment": "# Challenge: Countdown"
+  },
+  {
+    "title": "Even or Odd",
+    "description": "Ask for a number with input(), then print whether it is even or odd.",
+    "difficulty": "beginner",
+    "starter_comment": "# Challenge: Even or Odd"
+  },
+  {
+    "title": "Factorial",
+    "description": "Define a function that takes an integer n and returns n! (factorial). Call it with n=5 and print the result.",
+    "difficulty": "intermediate",
+    "starter_comment": "# Challenge: Factorial"
+  },
+  {
+    "title": "Reverse a String",
+    "description": "Create a variable with any string, then print it reversed using a for loop.",
+    "difficulty": "beginner",
+    "starter_comment": "# Challenge: Reverse a String"
+  },
+  {
+    "title": "Fibonacci Sequence",
+    "description": "Print the first 10 numbers in the Fibonacci sequence using a loop.",
+    "difficulty": "intermediate",
+    "starter_comment": "# Challenge: Fibonacci Sequence"
+  },
+  {
+    "title": "Simple Calculator",
+    "description": "Define functions for add, subtract, multiply, and divide. Call each with two numbers and print the results.",
+    "difficulty": "intermediate",
+    "starter_comment": "# Challenge: Simple Calculator"
+  },
+  {
+    "title": "Word Counter",
+    "description": "Define a function that takes a string and returns the number of words in it. Test it with a sentence.",
+    "difficulty": "intermediate",
+    "starter_comment": "# Challenge: Word Counter"
+  }
+]
