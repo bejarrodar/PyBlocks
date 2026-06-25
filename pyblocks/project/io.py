@@ -4,6 +4,9 @@ from pathlib import Path
 from pyblocks.project.model import Project
 from pyblocks.canvas.model import CanvasModel
 from pyblocks.canvas.serializer import CanvasSerializer
+from pyblocks.logger import get_logger
+
+log = get_logger("project.io")
 
 _CANVAS_DEFAULT = {"blocks": [], "scroll": [0, 0]}
 _LAYOUT_DEFAULT = {"panels": {}}
@@ -13,6 +16,7 @@ class ProjectIO:
 
     @staticmethod
     def create(name: str, root: Path) -> Project:
+        log.info("Creating project '%s' at %s", name, root)
         root.mkdir(parents=True, exist_ok=True)
         (root / "main.py").touch()
         pyblocks_dir = root / ".pyblocks"
@@ -22,10 +26,12 @@ class ProjectIO:
         ProjectIO.save(project)
         (pyblocks_dir / "canvas.json").write_text(json.dumps(_CANVAS_DEFAULT, indent=2))
         (pyblocks_dir / "layout.json").write_text(json.dumps(_LAYOUT_DEFAULT, indent=2))
+        log.debug("Project files written to %s", pyblocks_dir)
         return project
 
     @staticmethod
     def save(project: Project) -> None:
+        log.debug("Saving project '%s'", project.name)
         data = {
             "name": project.name,
             "active_file": str(project.active_file),
@@ -39,8 +45,10 @@ class ProjectIO:
     def load(root: Path) -> Project:
         project_file = root / ".pyblocks" / "project.json"
         if not project_file.exists():
+            log.error("project.json not found at %s", root)
             raise FileNotFoundError(f"No PyBlocks project found at {root}")
         data = json.loads(project_file.read_text())
+        log.info("Loaded project '%s' from %s", data.get("name"), root)
         return Project(
             name=data["name"],
             root=root,
@@ -55,12 +63,14 @@ class ProjectIO:
         try:
             return CanvasSerializer.load(path)
         except FileNotFoundError:
+            log.warning("canvas.json not found for '%s'; starting empty", project.name)
             return CanvasModel()
 
     @staticmethod
     def save_canvas(project: Project, canvas: CanvasModel) -> None:
         project.pyblocks_dir.mkdir(parents=True, exist_ok=True)
         CanvasSerializer.save(canvas, project.pyblocks_dir / "canvas.json")
+        log.debug("Canvas saved for '%s'", project.name)
 
 
     @staticmethod

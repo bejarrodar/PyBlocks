@@ -11,6 +11,9 @@ from pyblocks.inspection.package_cache import PackageCache
 from pyblocks.inspection.package_scanner import PackageScanner
 from pyblocks.inspection.block_factory import package_color
 from importlib.metadata import version as pkg_version
+from pyblocks.logger import get_logger
+
+log = get_logger("package_manager")
 
 
 class PackageManagerPanel(Panel):
@@ -111,31 +114,40 @@ class PackageManagerPanel(Panel):
         threading.Thread(target=self._do_install, args=(name,), daemon=True).start()
 
     def _do_install(self, name: str) -> None:
+        log.info("Installing package '%s' via pip", name)
         result = subprocess.run(
             [sys.executable, "-m", "pip", "install", name],
             capture_output=True, text=True,
         )
         if result.returncode != 0:
-            self.content.after(0, self._set_status, f"Failed: {result.stderr.strip()[:120]}")
+            err = result.stderr.strip()
+            log.error("pip install '%s' failed (code %d): %s", name, result.returncode, err[-500:])
+            self.content.after(0, self._set_status, f"Failed: {err[:120]}")
             return
+        log.info("pip install '%s' succeeded", name)
         self.content.after(0, self._set_status, "Scanning…")
         try:
             ver = pkg_version(name)
         except Exception:
             ver = "unknown"
+        log.debug("Package '%s' version: %s", name, ver)
         color = package_color(name)
-        entries = PackageScanner.scan(name)
+        entries, scan_err = PackageScanner.scan_with_error(name)
         if entries is None:
-            self.content.after(0, self._set_status, f"Failed: could not scan {name}")
+            msg = f"Failed: {scan_err}" if scan_err else f"Failed: could not scan {name}"
+            log.error("Scan of '%s' failed: %s", name, scan_err)
+            self.content.after(0, self._set_status, msg)
             return
         PackageCache.write(name, ver, color, [
             {"qualname": e.qualname, "params": e.params, "submodule": e.submodule}
             for e in entries
         ])
+        log.info("Cached %d blocks for '%s' %s", len(entries), name, ver)
         self.content.after(0, self._refresh_scanned)
         self.content.after(0, self._set_status, f"Done — {len(entries)} blocks added")
 
     def _rescan(self, name: str, version: str) -> None:
+        log.info("Rescanning package '%s' %s", name, version)
         PackageCache.delete(name, version)
         self._set_status(f"Rescanning {name}…")
         threading.Thread(target=self._do_install, args=(name,), daemon=True).start()

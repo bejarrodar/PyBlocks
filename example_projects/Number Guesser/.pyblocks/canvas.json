@@ -1,0 +1,114 @@
+{
+  "blocks": [
+    {
+      "id": "b0",
+      "type": "comment_block",
+      "label_template": "# {text}",
+      "inputs": {
+        "text": "Guess the Number Game"
+      },
+      "children": [],
+      "color": "#6c7086",
+      "indent": false,
+      "x": 40,
+      "y": 20
+    },
+    {
+      "id": "b1",
+      "type": "import_block",
+      "label_template": "IMPORT {module}",
+      "inputs": {
+        "module": "random"
+      },
+      "children": [],
+      "color": "#94e2d5",
+      "indent": false,
+      "x": 40,
+      "y": 60
+    },
+    {
+      "id": "b2",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": {
+        "name": "number",
+        "value": "random.randint(1, 10)"
+      },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 100
+    },
+    {
+      "id": "4b02d29f",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": {
+        "name": "guess",
+        "value": "int(input(\"Guess a number 1-10: \"))"
+      },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "b4",
+      "type": "if_block",
+      "label_template": "IF {condition}:",
+      "inputs": {
+        "condition": "guess == number"
+      },
+      "children": [
+        {
+          "id": "b4c0",
+          "type": "print_block",
+          "label_template": "PRINT {value}",
+          "inputs": {
+            "value": "\"You got it!\""
+          },
+          "children": [],
+          "color": "#a6e3a1",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "color": "#cba6f7",
+      "indent": true,
+      "x": 40,
+      "y": 280
+    },
+    {
+      "id": "b5",
+      "type": "else_block",
+      "label_template": "ELSE:",
+      "inputs": {},
+      "children": [
+        {
+          "id": "b5c0",
+          "type": "print_block",
+          "label_template": "PRINT {value}",
+          "inputs": {
+            "value": "\"Wrong! It was \" + str(number)"
+          },
+          "children": [],
+          "color": "#a6e3a1",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "color": "#b4befe",
+      "indent": true,
+      "x": 40,
+      "y": 400
+    }
+  ],
+  "scroll": [
+    0,
+    0
+  ]
+}

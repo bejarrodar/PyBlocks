@@ -4,6 +4,10 @@ import threading
 import sys
 from pathlib import Path
 from typing import Callable
+from pyblocks.logger import get_logger
+
+log = get_logger("runner")
+
 
 class ProgramRunner:
 
@@ -23,6 +27,7 @@ class ProgramRunner:
     def start(self, script: Path) -> None:
         if self.is_running:
             self.stop()
+        log.info("Starting %s", script)
         self._proc = subprocess.Popen(
             [sys.executable, "-u", str(script)],
             stdout=subprocess.PIPE,
@@ -30,6 +35,7 @@ class ProgramRunner:
             stdin=subprocess.PIPE,
             bufsize=0,
         )
+        log.debug("PID %d", self._proc.pid)
         self.is_running = True
         t_out = threading.Thread(target=self._drain_stdout, daemon=True)
         t_err = threading.Thread(target=self._drain_stderr, daemon=True)
@@ -48,10 +54,12 @@ class ProgramRunner:
 
     def stop(self) -> None:
         if self._proc and self.is_running:
+            log.info("Terminating PID %d", self._proc.pid)
             self._proc.terminate()
             try:
                 self._proc.wait(timeout=2)
             except subprocess.TimeoutExpired:
+                log.warning("PID %d did not terminate; killing", self._proc.pid)
                 self._proc.kill()
         self.is_running = False
 
@@ -80,12 +88,18 @@ class ProgramRunner:
             line = self._proc.stderr.readline()
             if not line:
                 break
-            self._on_stderr(line.decode("utf-8", errors="replace").rstrip("\n"))
+            decoded = line.decode("utf-8", errors="replace").rstrip("\n")
+            log.debug("stderr: %s", decoded)
+            self._on_stderr(decoded)
         self._proc.stderr.close()
 
     def _wait_exit(self) -> None:
         code = self._proc.wait()
         self.is_running = False
+        if code == 0:
+            log.info("Process exited cleanly (code 0)")
+        else:
+            log.warning("Process exited with code %d", code)
         self._on_exit(code)
 
 import collections

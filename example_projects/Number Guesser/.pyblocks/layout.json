@@ -1,0 +1,24 @@
+{
+  "panels": {
+    "console": {
+      "floating": false,
+      "hidden": false
+    },
+    "files": {
+      "floating": false,
+      "hidden": false
+    },
+    "canvas": {
+      "floating": false,
+      "hidden": false
+    },
+    "live_python": {
+      "floating": false,
+      "hidden": false
+    },
+    "palette": {
+      "floating": false,
+      "hidden": false
+    }
+  }
+}

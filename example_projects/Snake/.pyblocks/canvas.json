@@ -1,0 +1,700 @@
+{
+  "blocks": [
+    {
+      "id": "sn0",
+      "type": "comment_block",
+      "label_template": "# {text}",
+      "inputs": { "text": "Snake Game — use arrow keys to move, eat the red food!" },
+      "children": [],
+      "color": "#6c7086",
+      "indent": false,
+      "x": 40,
+      "y": 20
+    },
+    {
+      "id": "sn1",
+      "type": "import_block",
+      "label_template": "IMPORT {module}",
+      "inputs": { "module": "pygame" },
+      "children": [],
+      "color": "#94e2d5",
+      "indent": false,
+      "x": 40,
+      "y": 60
+    },
+    {
+      "id": "sn2",
+      "type": "import_block",
+      "label_template": "IMPORT {module}",
+      "inputs": { "module": "random" },
+      "children": [],
+      "color": "#94e2d5",
+      "indent": false,
+      "x": 40,
+      "y": 100
+    },
+    {
+      "id": "sn3",
+      "type": "comment_block",
+      "label_template": "# {text}",
+      "inputs": { "text": "Constants" },
+      "children": [],
+      "color": "#6c7086",
+      "indent": false,
+      "x": 40,
+      "y": 140
+    },
+    {
+      "id": "sn4",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "CELL", "value": "20" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 180
+    },
+    {
+      "id": "sn5",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "COLS", "value": "30" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 220
+    },
+    {
+      "id": "sn6",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "ROWS", "value": "20" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 260
+    },
+    {
+      "id": "sn7",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "WIDTH", "value": "CELL * COLS" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 300
+    },
+    {
+      "id": "sn8",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "HEIGHT", "value": "CELL * ROWS" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 340
+    },
+    {
+      "id": "sn9",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "FPS", "value": "8" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 380
+    },
+    {
+      "id": "sn10",
+      "type": "comment_block",
+      "label_template": "# {text}",
+      "inputs": { "text": "Colors (R, G, B)" },
+      "children": [],
+      "color": "#6c7086",
+      "indent": false,
+      "x": 40,
+      "y": 420
+    },
+    {
+      "id": "sn11",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "BLACK", "value": "(0, 0, 0)" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 460
+    },
+    {
+      "id": "sn12",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "GREEN", "value": "(0, 180, 0)" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 500
+    },
+    {
+      "id": "sn13",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "RED", "value": "(200, 0, 0)" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 540
+    },
+    {
+      "id": "sn14",
+      "type": "comment_block",
+      "label_template": "# {text}",
+      "inputs": { "text": "Set up the pygame window" },
+      "children": [],
+      "color": "#6c7086",
+      "indent": false,
+      "x": 40,
+      "y": 580
+    },
+    {
+      "id": "sn15",
+      "type": "expr_block",
+      "label_template": "{expr}",
+      "inputs": { "expr": "pygame.init()" },
+      "children": [],
+      "color": "#7f849c",
+      "indent": false,
+      "x": 40,
+      "y": 620
+    },
+    {
+      "id": "sn16",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "screen", "value": "pygame.display.set_mode((WIDTH, HEIGHT))" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 660
+    },
+    {
+      "id": "sn17",
+      "type": "expr_block",
+      "label_template": "{expr}",
+      "inputs": { "expr": "pygame.display.set_caption(\"Snake\")" },
+      "children": [],
+      "color": "#7f849c",
+      "indent": false,
+      "x": 40,
+      "y": 700
+    },
+    {
+      "id": "sn18",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "clock", "value": "pygame.time.Clock()" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 740
+    },
+    {
+      "id": "sn19",
+      "type": "comment_block",
+      "label_template": "# {text}",
+      "inputs": { "text": "Game state" },
+      "children": [],
+      "color": "#6c7086",
+      "indent": false,
+      "x": 40,
+      "y": 780
+    },
+    {
+      "id": "sn20",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "snake", "value": "[(COLS // 2, ROWS // 2)]" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 820
+    },
+    {
+      "id": "sn21",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "dx", "value": "1" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 860
+    },
+    {
+      "id": "sn22",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "dy", "value": "0" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 900
+    },
+    {
+      "id": "sn23",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "food", "value": "(random.randint(0, COLS - 1), random.randint(0, ROWS - 1))" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 940
+    },
+    {
+      "id": "sn24",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "running", "value": "True" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 980
+    },
+    {
+      "id": "sn25",
+      "type": "assign_block",
+      "label_template": "SET {name} = {value}",
+      "inputs": { "name": "score", "value": "0" },
+      "children": [],
+      "color": "#89b4fa",
+      "indent": false,
+      "x": 40,
+      "y": 1020
+    },
+    {
+      "id": "sn26",
+      "type": "comment_block",
+      "label_template": "# {text}",
+      "inputs": { "text": "Game loop" },
+      "children": [],
+      "color": "#6c7086",
+      "indent": false,
+      "x": 40,
+      "y": 1060
+    },
+    {
+      "id": "sn27",
+      "type": "while_block",
+      "label_template": "WHILE {condition}:",
+      "inputs": { "condition": "running" },
+      "color": "#fab387",
+      "indent": true,
+      "x": 40,
+      "y": 1100,
+      "children": [
+        {
+          "id": "sn27c0",
+          "type": "for_block",
+          "label_template": "FOR {target} IN {iterable}:",
+          "inputs": { "target": "event", "iterable": "pygame.event.get()" },
+          "color": "#fab387",
+          "indent": true,
+          "x": 0,
+          "y": 0,
+          "children": [
+            {
+              "id": "sn27c0c0",
+              "type": "if_block",
+              "label_template": "IF {condition}:",
+              "inputs": { "condition": "event.type == pygame.QUIT" },
+              "color": "#cba6f7",
+              "indent": true,
+              "x": 0,
+              "y": 0,
+              "children": [
+                {
+                  "id": "sn27c0c0c0",
+                  "type": "assign_block",
+                  "label_template": "SET {name} = {value}",
+                  "inputs": { "name": "running", "value": "False" },
+                  "children": [],
+                  "color": "#89b4fa",
+                  "indent": false,
+                  "x": 0,
+                  "y": 0
+                }
+              ]
+            },
+            {
+              "id": "sn27c0c1",
+              "type": "if_block",
+              "label_template": "IF {condition}:",
+              "inputs": { "condition": "event.type == pygame.KEYDOWN" },
+              "color": "#cba6f7",
+              "indent": true,
+              "x": 0,
+              "y": 0,
+              "children": [
+                {
+                  "id": "sn27c0c1c0",
+                  "type": "if_block",
+                  "label_template": "IF {condition}:",
+                  "inputs": { "condition": "event.key == pygame.K_UP and dy == 0" },
+                  "color": "#cba6f7",
+                  "indent": true,
+                  "x": 0,
+                  "y": 0,
+                  "children": [
+                    {
+                      "id": "sn27c0c1c0c0",
+                      "type": "expr_block",
+                      "label_template": "{expr}",
+                      "inputs": { "expr": "dx, dy = 0, -1" },
+                      "children": [],
+                      "color": "#7f849c",
+                      "indent": false,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "sn27c0c1c1",
+                  "type": "elif_block",
+                  "label_template": "ELIF {condition}:",
+                  "inputs": { "condition": "event.key == pygame.K_DOWN and dy == 0" },
+                  "color": "#b4befe",
+                  "indent": true,
+                  "x": 0,
+                  "y": 0,
+                  "children": [
+                    {
+                      "id": "sn27c0c1c1c0",
+                      "type": "expr_block",
+                      "label_template": "{expr}",
+                      "inputs": { "expr": "dx, dy = 0, 1" },
+                      "children": [],
+                      "color": "#7f849c",
+                      "indent": false,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "sn27c0c1c2",
+                  "type": "elif_block",
+                  "label_template": "ELIF {condition}:",
+                  "inputs": { "condition": "event.key == pygame.K_LEFT and dx == 0" },
+                  "color": "#b4befe",
+                  "indent": true,
+                  "x": 0,
+                  "y": 0,
+                  "children": [
+                    {
+                      "id": "sn27c0c1c2c0",
+                      "type": "expr_block",
+                      "label_template": "{expr}",
+                      "inputs": { "expr": "dx, dy = -1, 0" },
+                      "children": [],
+                      "color": "#7f849c",
+                      "indent": false,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "sn27c0c1c3",
+                  "type": "elif_block",
+                  "label_template": "ELIF {condition}:",
+                  "inputs": { "condition": "event.key == pygame.K_RIGHT and dx == 0" },
+                  "color": "#b4befe",
+                  "indent": true,
+                  "x": 0,
+                  "y": 0,
+                  "children": [
+                    {
+                      "id": "sn27c0c1c3c0",
+                      "type": "expr_block",
+                      "label_template": "{expr}",
+                      "inputs": { "expr": "dx, dy = 1, 0" },
+                      "children": [],
+                      "color": "#7f849c",
+                      "indent": false,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sn27c1",
+          "type": "comment_block",
+          "label_template": "# {text}",
+          "inputs": { "text": "Move the snake head one step" },
+          "children": [],
+          "color": "#6c7086",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "sn27c2",
+          "type": "assign_block",
+          "label_template": "SET {name} = {value}",
+          "inputs": { "name": "hx", "value": "snake[0][0] + dx" },
+          "children": [],
+          "color": "#89b4fa",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "sn27c3",
+          "type": "assign_block",
+          "label_template": "SET {name} = {value}",
+          "inputs": { "name": "hy", "value": "snake[0][1] + dy" },
+          "children": [],
+          "color": "#89b4fa",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "sn27c4",
+          "type": "if_block",
+          "label_template": "IF {condition}:",
+          "inputs": { "condition": "hx < 0 or hx >= COLS or hy < 0 or hy >= ROWS" },
+          "color": "#cba6f7",
+          "indent": true,
+          "x": 0,
+          "y": 0,
+          "children": [
+            {
+              "id": "sn27c4c0",
+              "type": "assign_block",
+              "label_template": "SET {name} = {value}",
+              "inputs": { "name": "running", "value": "False" },
+              "children": [],
+              "color": "#89b4fa",
+              "indent": false,
+              "x": 0,
+              "y": 0
+            }
+          ]
+        },
+        {
+          "id": "sn27c5",
+          "type": "if_block",
+          "label_template": "IF {condition}:",
+          "inputs": { "condition": "(hx, hy) in snake" },
+          "color": "#cba6f7",
+          "indent": true,
+          "x": 0,
+          "y": 0,
+          "children": [
+            {
+              "id": "sn27c5c0",
+              "type": "assign_block",
+              "label_template": "SET {name} = {value}",
+              "inputs": { "name": "running", "value": "False" },
+              "children": [],
+              "color": "#89b4fa",
+              "indent": false,
+              "x": 0,
+              "y": 0
+            }
+          ]
+        },
+        {
+          "id": "sn27c6",
+          "type": "if_block",
+          "label_template": "IF {condition}:",
+          "inputs": { "condition": "(hx, hy) == food" },
+          "color": "#cba6f7",
+          "indent": true,
+          "x": 0,
+          "y": 0,
+          "children": [
+            {
+              "id": "sn27c6c0",
+              "type": "expr_block",
+              "label_template": "{expr}",
+              "inputs": { "expr": "score += 1" },
+              "children": [],
+              "color": "#7f849c",
+              "indent": false,
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "sn27c6c1",
+              "type": "assign_block",
+              "label_template": "SET {name} = {value}",
+              "inputs": { "name": "food", "value": "(random.randint(0, COLS - 1), random.randint(0, ROWS - 1))" },
+              "children": [],
+              "color": "#89b4fa",
+              "indent": false,
+              "x": 0,
+              "y": 0
+            }
+          ]
+        },
+        {
+          "id": "sn27c7",
+          "type": "else_block",
+          "label_template": "ELSE:",
+          "inputs": {},
+          "color": "#b4befe",
+          "indent": true,
+          "x": 0,
+          "y": 0,
+          "children": [
+            {
+              "id": "sn27c7c0",
+              "type": "expr_block",
+              "label_template": "{expr}",
+              "inputs": { "expr": "snake.pop()" },
+              "children": [],
+              "color": "#7f849c",
+              "indent": false,
+              "x": 0,
+              "y": 0
+            }
+          ]
+        },
+        {
+          "id": "sn27c8",
+          "type": "expr_block",
+          "label_template": "{expr}",
+          "inputs": { "expr": "snake.insert(0, (hx, hy))" },
+          "children": [],
+          "color": "#7f849c",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "sn27c9",
+          "type": "comment_block",
+          "label_template": "# {text}",
+          "inputs": { "text": "Draw everything" },
+          "children": [],
+          "color": "#6c7086",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "sn27c10",
+          "type": "expr_block",
+          "label_template": "{expr}",
+          "inputs": { "expr": "screen.fill(BLACK)" },
+          "children": [],
+          "color": "#7f849c",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "sn27c11",
+          "type": "for_block",
+          "label_template": "FOR {target} IN {iterable}:",
+          "inputs": { "target": "seg", "iterable": "snake" },
+          "color": "#fab387",
+          "indent": true,
+          "x": 0,
+          "y": 0,
+          "children": [
+            {
+              "id": "sn27c11c0",
+              "type": "expr_block",
+              "label_template": "{expr}",
+              "inputs": { "expr": "pygame.draw.rect(screen, GREEN, (seg[0] * CELL, seg[1] * CELL, CELL - 2, CELL - 2))" },
+              "children": [],
+              "color": "#7f849c",
+              "indent": false,
+              "x": 0,
+              "y": 0
+            }
+          ]
+        },
+        {
+          "id": "sn27c12",
+          "type": "expr_block",
+          "label_template": "{expr}",
+          "inputs": { "expr": "pygame.draw.rect(screen, RED, (food[0] * CELL, food[1] * CELL, CELL - 2, CELL - 2))" },
+          "children": [],
+          "color": "#7f849c",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "sn27c13",
+          "type": "expr_block",
+          "label_template": "{expr}",
+          "inputs": { "expr": "pygame.display.set_caption(f\"Snake  Score: {score}\")" },
+          "children": [],
+          "color": "#7f849c",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "sn27c14",
+          "type": "expr_block",
+          "label_template": "{expr}",
+          "inputs": { "expr": "pygame.display.flip()" },
+          "children": [],
+          "color": "#7f849c",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "sn27c15",
+          "type": "expr_block",
+          "label_template": "{expr}",
+          "inputs": { "expr": "clock.tick(FPS)" },
+          "children": [],
+          "color": "#7f849c",
+          "indent": false,
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "sn28",
+      "type": "expr_block",
+      "label_template": "{expr}",
+      "inputs": { "expr": "pygame.quit()" },
+      "children": [],
+      "color": "#7f849c",
+      "indent": false,
+      "x": 40,
+      "y": 1140
+    }
+  ],
+  "scroll": [0, 0]
+}

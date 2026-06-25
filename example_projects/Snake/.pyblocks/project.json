@@ -1,0 +1,8 @@
+{
+  "name": "Snake",
+  "active_file": "main.py",
+  "expansions": [],
+  "enabled_packages": [
+    "pygame"
+  ]
+}

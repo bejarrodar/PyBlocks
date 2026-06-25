@@ -68,6 +68,13 @@ def continue_block():
     return "continue"
 
 
+@block(label="WITH {expr} AS {name}:", category="Control", color="#89dceb",
+       indent=True,
+       description="Context manager — automatically closes resource when done.")
+def with_block(expr, name):
+    return f"with {expr} as {name}:"
+
+
 @block(label="RETURN {value}", category="Control", color="#a6e3a1",
        description="Return a value from a function.")
 def return_block(value):

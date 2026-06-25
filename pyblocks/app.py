@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, simpledialog
 from pathlib import Path
+from pyblocks import theme
+import pyblocks.logger  # initialises the rotating log file
+from pyblocks.logger import get_logger
 from pyblocks.panels import Panel, PanelManager
 from pyblocks.panels.files_panel import FileExplorerPanel
 from pyblocks.panels.canvas_panel import CanvasPanel
@@ -14,6 +17,14 @@ from pyblocks.codegen.error_mapper import ErrorMapper
 from pyblocks.runner import ProgramRunner
 from pyblocks.blocks.editor.model import CustomBlockDef
 import pyblocks.blocks.builtins  # registers built-in blocks into the registry
+import pyblocks.blocks.stdlib_strings
+import pyblocks.blocks.stdlib_math
+import pyblocks.blocks.stdlib_time
+import pyblocks.blocks.stdlib_files
+import pyblocks.blocks.stdlib_collections
+import pyblocks.blocks.stdlib_misc
+
+log = get_logger("app")
 
 
 class PyBlocksApp(tk.Tk):
@@ -21,6 +32,7 @@ class PyBlocksApp(tk.Tk):
         super().__init__()
         self.title("PyBlocks")
         self.geometry("1280x800")
+        theme.apply(self)
         self.protocol("WM_DELETE_WINDOW", self._on_close)
 
         self._project: Project | None = None
@@ -223,6 +235,7 @@ class PyBlocksApp(tk.Tk):
         if not name:
             return
         root = Path(folder) / name
+        log.info("Creating new project '%s' at %s", name, root)
         self._project = ProjectIO.create(name=name, root=root)
         self._panel_manager = PanelManager(self, self._project)
         self.title(f"PyBlocks — {name}")
@@ -231,12 +244,14 @@ class PyBlocksApp(tk.Tk):
         self._load_enabled_packages()
         self._load_custom_blocks()
         self.mark_saved()
+        log.info("New project '%s' ready", name)
 
 
     def _open_project(self):
         folder = filedialog.askdirectory(title="Open PyBlocks Project")
         if not folder:
             return
+        log.info("Opening project from %s", folder)
         try:
             self._project = ProjectIO.load(Path(folder))
             self._panel_manager = PanelManager(self, self._project)
@@ -247,12 +262,15 @@ class PyBlocksApp(tk.Tk):
             self._load_enabled_packages()
             self._load_custom_blocks()
             self.mark_saved()
+            log.info("Opened project '%s'", self._project.name)
         except FileNotFoundError:
+            log.error("No PyBlocks project at %s", folder)
             messagebox.showerror("Not a PyBlocks project",
                                  f"{folder} does not contain a .pyblocks folder.")
 
     def _save(self):
         if self._project:
+            log.info("Saving project '%s'", self._project.name)
             ProjectIO.save(self._project)
             if self._panel_manager:
                 self._panel_manager.save_layout()
@@ -330,8 +348,8 @@ class PyBlocksApp(tk.Tk):
         loader = CustomBlockLoader(self._project.root)
         try:
             loader.load_or_reload()
-        except RuntimeError:
-            pass
+        except RuntimeError as exc:
+            log.warning("Custom block load failed: %s", exc)
 
     def _run(self) -> None:
         if not self._project:
@@ -339,6 +357,7 @@ class PyBlocksApp(tk.Tk):
         script = self._project.root / "main.py"
         if not script.exists():
             return
+        log.info("Running %s", script)
         if self._console_panel:
             self._console_panel.clear()
             self._console_panel.set_running(True)
@@ -355,6 +374,7 @@ class PyBlocksApp(tk.Tk):
 
     def _stop(self) -> None:
         if self._runner:
+            log.info("Stopping program")
             self._runner.stop()
 
     def _on_run_stdout(self, text: str) -> None:
@@ -366,6 +386,10 @@ class PyBlocksApp(tk.Tk):
             self.after(0, lambda l=line: self._console_panel.append_stderr(l))
 
     def _on_run_exit(self, code: int) -> None:
+        if code == 0:
+            log.info("Program exited cleanly (code 0)")
+        else:
+            log.warning("Program exited with code %d", code)
         def _finish():
             self._run_btn.configure(state="normal")
             self._stop_btn.configure(state="disabled")
@@ -400,21 +424,25 @@ class PyBlocksApp(tk.Tk):
                 self._live_panel.highlight_scope(scope_vars)
 
     def _open_package_manager(self) -> None:
-        if not self._project:
-            return
-        from pyblocks.expansions.loader import ExpansionLoader
-        from pyblocks.project.io import ProjectIO
         from pyblocks.panels.package_manager_panel import PackageManagerPanel
-        loader = ExpansionLoader(self._project.root)
-        packs = loader.discover()
-        enabled = ProjectIO.load_expansions(self._project)
-        enabled_pkgs = {n: True for n in self._project.enabled_packages}
+        if self._project:
+            from pyblocks.expansions.loader import ExpansionLoader
+            from pyblocks.project.io import ProjectIO
+            loader = ExpansionLoader(self._project.root)
+            packs = loader.discover()
+            enabled = ProjectIO.load_expansions(self._project)
+            enabled_pkgs = {n: True for n in self._project.enabled_packages}
+            on_toggle = lambda name, val: self._on_expansion_toggle(
+                name, val, loader, packs, enabled)
+            on_toggle_package = self._on_package_toggle
+        else:
+            packs, enabled, enabled_pkgs = [], {}, {}
+            on_toggle = on_toggle_package = None
         panel = PackageManagerPanel(
             self, packs=packs, enabled=enabled,
-            on_toggle=lambda name, val: self._on_expansion_toggle(
-                name, val, loader, packs, enabled),
+            on_toggle=on_toggle,
             enabled_packages=enabled_pkgs,
-            on_toggle_package=self._on_package_toggle,
+            on_toggle_package=on_toggle_package,
         )
         panel.float()
 
@@ -473,8 +501,9 @@ class PyBlocksApp(tk.Tk):
             if enabled.get(pack.name):
                 try:
                     loader.load(pack)
-                except RuntimeError:
-                    pass
+                    log.info("Loaded expansion '%s'", pack.name)
+                except RuntimeError as exc:
+                    log.error("Failed to load expansion '%s': %s", pack.name, exc)
 
     def _load_enabled_packages(self) -> None:
         if not self._project:
@@ -493,6 +522,9 @@ class PyBlocksApp(tk.Tk):
         self._project.enabled_packages = pkgs
         from pyblocks.project.io import ProjectIO
         ProjectIO.save(self._project)
+        if enabled:
+            from pyblocks.expansions.package_loader import PackageLoader
+            PackageLoader.load_enabled([name])
         if self._palette_panel:
             self._palette_panel._populate()
 
@@ -507,6 +539,7 @@ class PyBlocksApp(tk.Tk):
             self._canvas_panel.renderer.select(block_id)
 
     def _on_close(self) -> None:
+        log.info("Application closing")
         if self._has_unsaved:
             if messagebox.askyesno("Unsaved changes", "Save before closing?"):
                 self._save()
